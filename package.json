@@ -1,0 +1,80 @@
+{
+  "name": "scanland-cms",
+  "version": "4.0.0",
+  "description": "Scanland CMS - Visual Content Management System. Professional WYSIWYG editor for Scanland websites with server-integrated cleaning and no authentication issues.",
+  "main": "scanland-cms-server.js",
+  "scripts": {
+    "start": "node scanland-cms-server.js",
+    "dev": "nodemon scanland-cms-server.js",
+    "test": "curl http://localhost:3001/health",
+    "setup": "npm install",
+    "health": "curl http://localhost:3001/health || echo 'Scanland CMS not running - use npm start'",
+    "editor": "echo 'Scanland CMS Editor: http://localhost:3001/editor' && open http://localhost:3001/editor",
+    "clean-backups": "find . -name '*.backup.*' -type f -delete && echo 'Backup files cleaned'",
+    "list-backups": "find . -name '*.backup.*' -type f",
+    "port-check": "lsof -ti:3001 || echo 'Port 3001 is available'",
+    "kill-port": "lsof -ti:3001 | xargs kill -9 || echo 'Port already free'",
+    "restart": "npm run kill-port && sleep 1 && npm start"
+  },
+  "keywords": [
+    "scanland",
+    "cms",
+    "visual-editor",
+    "wysiwyg",
+    "content-management",
+    "website-builder",
+    "no-code",
+    "client-websites",
+    "server-integrated",
+    "clean-output"
+  ],
+  "author": "Scanland - Visual Content Management Solutions",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scanland/visual-cms.git"
+  },
+  "homepage": "https://scanland.org",
+  "scanland": {
+    "system": "Scanland Visual CMS",
+    "version": "4.0.0",
+    "type": "server-integrated-visual-editor",
+    "purpose": "professional-content-management",
+    "authentication": "simple-secure",
+    "features": [
+      "visual-wysiwyg-editing",
+      "server-side-cleaning",
+      "zero-cms-traces-in-output",
+      "text-formatting-preservation",
+      "fixed-button-deletion",
+      "universal-element-editing",
+      "automatic-backups",
+      "clean-downloads",
+      "professional-ui"
+    ],
+    "color-scheme": {
+      "background": "#F3E7D1",
+      "text": "#0F3D27", 
+      "primary": "#0F3D27",
+      "accent": "#7BB58C",
+      "neutral": "#E0E0E0",
+      "footer": "#0B2A1A",
+      "footer-hover": "#145B37"
+    },
+    "activation": "Ctrl+Shift+E",
+    "password": "Scanland2025!CMS",
+    "port": 3001,
+    "script-url": "http://localhost:3001/cms.js"
+  }
+}
