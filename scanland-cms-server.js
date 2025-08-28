@@ -9,7 +9,22 @@ let authenticated = false;
 
 app.use(express.json({ limit: '50mb' }));
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
+    const allowedOrigins = [
+        'https://scanland.org',
+        'https://www.scanland.org', 
+        'https://thescanlandgroup.com',
+        'https://www.thescanlandgroup.com',
+        'https://districtforgesolutions.com',
+        'https://www.districtforgesolutions.com',
+        'http://localhost:5500',
+        'http://127.0.0.1:5500'
+    ];
+    
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+    }
+    
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
     res.header('Access-Control-Allow-Credentials', 'true');
@@ -23,11 +38,33 @@ app.get('/health', (req, res) => {
 
 app.post('/login', (req, res) => {
     const { password } = req.body;
-    if (password === 'Scanland2025!CMS') {
+    console.log('Login attempt received');
+    
+    const validPasswords = {
+        'Scanland2025!CMS': 'Scanland Admin',
+        'TSG2025!Edit': 'The Scanland Group',
+        'District2025!Edit': 'District Forge Solutions', 
+        'Jubilee2025!Edit': 'Jubilee Coffee & Tea',
+        'Mission2025!Edit': 'Mission Driven Pod',
+        'Consulting2025!Edit': 'Scanland Consulting',
+        'Grandstands2025!Edit': 'Forgotten Grandstands'
+    };
+    
+    if (validPasswords[password]) {
         authenticated = true;
-        res.json({ success: true, message: 'Authentication successful' });
+        console.log('Login successful for:', validPasswords[password]);
+        res.json({ 
+            success: true, 
+            message: 'Authentication successful',
+            user: validPasswords[password],
+            timestamp: new Date().toISOString()
+        });
     } else {
-        res.json({ success: false, message: 'Invalid password' });
+        console.log('Login failed - incorrect password');
+        res.json({ 
+            success: false, 
+            message: 'Invalid password'
+        });
     }
 });
 
@@ -393,7 +430,7 @@ function showHelp() {
         '<ul style="margin:10px 0;padding-left:20px;"><li><strong>Ctrl+Shift+E:</strong> Toggle CMS on/off</li><li><strong>Enter:</strong> Confirm in browser dialogs</li><li><strong>Escape:</strong> Cancel operations</li></ul>' +
         '<h3 style="color:#0F3D27;">Troubleshooting:</h3>' +
         '<ul style="margin:10px 0;padding-left:20px;"><li>If buttons stop working, exit and restart CMS</li><li>New buttons automatically use website styling</li><li>Clean download removes all CMS traces</li><li>Contact support if you encounter issues</li></ul>' +
-        '<div style="margin-top:25px;padding:20px;background:#7BB58C;border-radius:8px;text-align:center;"><p style="margin:0 0 10px 0;color:#F3E7D1;font-weight:bold;font-size:16px;">Need More Help?</p><a href="https://scanland.org/cmscontact.html?source=' + currentPage + '" target="_blank" style="color:#F3E7D1;text-decoration:underline;font-weight:bold;font-size:14px;">Contact Scanland Support</a></div>' +
+        '<div style="margin-top:25px;padding:20px;background:#7BB58C;border-radius:8px;text-align:center;"><p style="margin:0 0 10px 0;color:#F3E7D1;font-weight:bold;font-size:16px;">Need More Help?</p><a href="https://scanland.org/cmscontact.html?source=' + currentPage + '" target="_blank" style="color:#F3E7D1;text-decoration:underline;font-weight:bold;font-size:14px;">Contact Scanland CMS Support</a></div>' +
         '</div>' +
         '<div style="text-align:center;margin-top:25px;"><button onclick="closeHelpDialog()" style="padding:15px 35px;background:#0F3D27;color:#F3E7D1;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:16px;">Close Help</button></div>';
     
