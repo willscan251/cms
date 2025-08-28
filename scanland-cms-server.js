@@ -504,7 +504,7 @@ app.listen(PORT, () => {
     console.log('🚀 SCANLAND CMS SERVER');
     console.log('='.repeat(30));
     console.log('Server: http://localhost:' + PORT);
-    console.log('Add this to your HTML: <script src="http://localhost:3001/cms.js"></script>')
+    console.log('Add this to your HTML: <script src="https://cms.scanland.org/cms.js"></script>')
     console.log('Password: Scanland2025!CMS');
     console.log('Shortcut: Ctrl+Shift+E');
     console.log('✅ Ready');
