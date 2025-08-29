@@ -761,7 +761,7 @@ async function downloadClean() {
         const body = clonedDoc.querySelector('body');
         if (body) body.style.paddingTop = '';
         
-        let cleanHTML = '<!DOCTYPE html>\\n' + clonedDoc.outerHTML;
+        let cleanHTML = '<!DOCTYPE html>\n' + clonedDoc.outerHTML;
         
         const serverUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
             ? 'http://localhost:3001' 
