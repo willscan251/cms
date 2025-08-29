@@ -872,7 +872,8 @@ app.post('/clean-download', (req, res) => {
         
         res.set({
             'Content-Type': 'text/html',
-            'Content-Disposition': 'attachment; filename="' + filename + '"'        });
+'Content-Disposition': 'attachment; filename="' + filename + '"'
+        });
         res.send(cleanHTML);
         
     } catch (error) {
