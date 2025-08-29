@@ -174,9 +174,7 @@ async function doLogin() {
     const password = document.getElementById('loginPassword').value;
     
     try {
-        const serverUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-            ? 'http://localhost:3001' 
-            : 'https://cms.scanland.org';
+        const serverUrl = window.location.origin;
             
         const response = await fetch(serverUrl + '/login', {
             method: 'POST',
@@ -762,9 +760,7 @@ async function downloadClean() {
         
         let cleanHTML = '<!DOCTYPE html>\n' + clonedDoc.outerHTML;
         
-        const serverUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-            ? 'http://localhost:3001' 
-            : 'https://cms.scanland.org';
+        const serverUrl = window.location.origin;
         
         const response = await fetch(serverUrl + '/clean-download', {
             method: 'POST',
