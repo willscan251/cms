@@ -885,10 +885,10 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log('\n='.repeat(15));
     console.log('SCANLAND CMS SERVER');
     console.log('='.repeat(60));
-    console.log('📋 INTEGRATION:');
-    console.log('Live - Add to HTML: <script src="https://cms.scanland.org/cms.js"></script>');
-    console.log('Test - Add to HTML: <script src="https://localhost:3001/cms.js"></script>');
+    console.log('🔋 INTEGRATION:');
+    console.log(`Live - Add to HTML: <script src="https://cms.scanland.org/cms.js"></script>`);
+    console.log(`Test - Add to HTML: <script src="http://localhost:${PORT}/cms.js"></script>`);
     console.log('');
-    console.log('✅ Ready for connections');
+    console.log(`✅ Ready for connections on port ${PORT}`);
     console.log('='.repeat(60));
 });
