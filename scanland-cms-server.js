@@ -62,6 +62,15 @@ app.get('/health', (req, res) => {
     });
 });
 
+// Simple root endpoint for Railway health checks
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'Scanland CMS Server Running',
+        status: 'healthy',
+        timestamp: new Date().toISOString()
+    });
+});
+
 // Login endpoint with multiple client passwords
 app.post('/login', (req, res) => {
     const { password } = req.body;
