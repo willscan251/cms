@@ -52,6 +52,11 @@ app.use((req, res, next) => {
     next();
 });
 
+// Root endpoint for Railway health checks
+app.get('/', (req, res) => {
+    res.status(200).send('OK');
+});
+
 // Health check
 app.get('/health', (req, res) => {
     res.json({ 
@@ -370,8 +375,8 @@ function makeContentEditable() {
         
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'cms-delete-btn cms-card-delete';
-        deleteBtn.innerHTML = '🗑️';
-        deleteBtn.style.cssText = 'position:absolute;top:-15px;right:-15px;background:#dc3545;color:white;border:2px solid white;border-radius:50%;width:30px;height:30px;cursor:pointer;display:none;z-index:999999;font-size:14px;';
+        deleteBtn.innerHTML = 'DEL';
+        deleteBtn.style.cssText = 'position:absolute;top:-15px;right:-15px;background:#dc3545;color:white;border:2px solid white;border-radius:50%;width:30px;height:30px;cursor:pointer;display:none;z-index:999999;font-size:10px;';
         
         if (getComputedStyle(card).position === 'static') {
             card.style.position = 'relative';
@@ -681,25 +686,25 @@ function showInfo() {
                 <li>Your changes appear immediately on your website</li>
             </ol>
             
-            <h3 style=\"color:#0F3D27;\">File Upload Instructions:</h3>
-            <h4 style=\"color:#0F3D27;margin-bottom:8px;\">Uploading Images:</h4>
-            <ol style=\"margin:5px 0 15px 20px;line-height:1.4;\">
+            <h3 style="color:#0F3D27;">File Upload Instructions:</h3>
+            <h4 style="color:#0F3D27;margin-bottom:8px;">Uploading Images:</h4>
+            <ol style="margin:5px 0 15px 20px;line-height:1.4;">
                 <li>Login to cPanel File Manager</li>
                 <li>Navigate to public_html folder</li>
                 <li>Go to /assets/images/ folder</li>
-                <li>Click \"Upload\" button and select images</li>
+                <li>Click "Upload" button and select images</li>
                 <li>Use in CMS: ./assets/images/filename.jpg</li>
             </ol>
 
-            <h4 style=\"color:#0F3D27;margin-bottom:8px;\">Uploading Documents:</h4>
-            <ol style=\"margin:5px 0 15px 20px;line-height:1.4;\">
+            <h4 style="color:#0F3D27;margin-bottom:8px;">Uploading Documents:</h4>
+            <ol style="margin:5px 0 15px 20px;line-height:1.4;">
                 <li>Navigate to public_html/assets/attachments/</li>
                 <li>Upload PDFs, Word docs, Excel files</li>
                 <li>Link to: ./assets/attachments/document.pdf</li>
             </ol>
 
-            <h4 style=\"color:#0F3D27;margin-bottom:8px;\">File Naming:</h4>
-            <ul style=\"margin:5px 0 15px 20px;line-height:1.4;\">
+            <h4 style="color:#0F3D27;margin-bottom:8px;">File Naming:</h4>
+            <ul style="margin:5px 0 15px 20px;line-height:1.4;">
                 <li>Use lowercase and hyphens (no spaces)</li>
                 <li>Examples: team-photo.png, company-brochure.pdf</li>
                 <li>Keep names short and descriptive</li>
@@ -761,7 +766,7 @@ async function downloadClean() {
         const body = clonedDoc.querySelector('body');
         if (body) body.style.paddingTop = '';
         
-        let cleanHTML = '<!DOCTYPE html>\n' + clonedDoc.outerHTML;
+        let cleanHTML = '<!DOCTYPE html>\\n' + clonedDoc.outerHTML;
         
         const serverUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
             ? 'http://localhost:3001' 
@@ -890,10 +895,10 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log('\n='.repeat(15));
     console.log('SCANLAND CMS SERVER');
     console.log('='.repeat(60));
-    console.log('📋 INTEGRATION:');
+    console.log('INTEGRATION:');
     console.log('Live - Add to HTML: <script src="https://cms.scanland.org/cms.js"></script>');
     console.log('Test - Add to HTML: <script src="https://localhost:3001/cms.js"></script>');
     console.log('');
-    console.log('✅ Ready for connections');
+    console.log('Ready for connections');
     console.log('='.repeat(60));
 });
