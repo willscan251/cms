@@ -1,5 +1,6 @@
 const express = require('express');
 const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -58,15 +59,6 @@ app.get('/health', (req, res) => {
         authenticated,
         server: 'Scanland CMS Server',
         port: PORT,
-        timestamp: new Date().toISOString()
-    });
-});
-
-// Simple root endpoint for Railway health checks
-app.get('/', (req, res) => {
-    res.json({ 
-        message: 'Scanland CMS Server Running',
-        status: 'healthy',
         timestamp: new Date().toISOString()
     });
 });
@@ -183,7 +175,9 @@ async function doLogin() {
     const password = document.getElementById('loginPassword').value;
     
     try {
-        const serverUrl = window.location.origin;
+        const serverUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? 'http://localhost:3001' 
+            : 'https://cms.scanland.org';
             
         const response = await fetch(serverUrl + '/login', {
             method: 'POST',
@@ -769,7 +763,9 @@ async function downloadClean() {
         
         let cleanHTML = '<!DOCTYPE html>\n' + clonedDoc.outerHTML;
         
-        const serverUrl = window.location.origin;
+        const serverUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? 'http://localhost:3001' 
+            : 'https://cms.scanland.org';
         
         const response = await fetch(serverUrl + '/clean-download', {
             method: 'POST',
@@ -894,10 +890,10 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log('\n='.repeat(15));
     console.log('SCANLAND CMS SERVER');
     console.log('='.repeat(60));
-    console.log('🔋 INTEGRATION:');
-    console.log(`Live - Add to HTML: <script src="https://cms.scanland.org/cms.js"></script>`);
-    console.log(`Test - Add to HTML: <script src="http://localhost:${PORT}/cms.js"></script>`);
+    console.log('📋 INTEGRATION:');
+    console.log('Live - Add to HTML: <script src="https://cms.scanland.org/cms.js"></script>');
+    console.log('Test - Add to HTML: <script src="https://localhost:3001/cms.js"></script>');
     console.log('');
-    console.log(`✅ Ready for connections on port ${PORT}`);
+    console.log('✅ Ready for connections');
     console.log('='.repeat(60));
 });
