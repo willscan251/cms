@@ -51,25 +51,22 @@ app.use((req, res, next) => {
     next();
 });
 
-// Root endpoint for Railway health checks
-app.get('/', (req, res) => {
-    res.status(200).json({ 
-        message: 'Scanland CMS Server Running',
-        status: 'healthy',
-        version: '4.0.0',
-        port: PORT,
-        authenticated: authenticated,
-        timestamp: new Date().toISOString()
-    });
-});
-
-// Health check endpoint
+// Health check
 app.get('/health', (req, res) => {
-    res.status(200).json({ 
+    res.json({ 
         status: 'running', 
         authenticated,
         server: 'Scanland CMS Server',
         port: PORT,
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Simple root endpoint for Railway health checks
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'Scanland CMS Server Running',
+        status: 'healthy',
         timestamp: new Date().toISOString()
     });
 });
@@ -186,7 +183,7 @@ async function doLogin() {
     const password = document.getElementById('loginPassword').value;
     
     try {
-        const serverUrl = window.location.origin.replace(/:\\/\\/localhost:\\d+/, '://cms.scanland.org');
+        const serverUrl = window.location.origin;
             
         const response = await fetch(serverUrl + '/login', {
             method: 'POST',
@@ -379,7 +376,7 @@ function makeContentEditable() {
         
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'cms-delete-btn cms-card-delete';
-        deleteBtn.innerHTML = 'X';
+        deleteBtn.innerHTML = '🗑️';
         deleteBtn.style.cssText = 'position:absolute;top:-15px;right:-15px;background:#dc3545;color:white;border:2px solid white;border-radius:50%;width:30px;height:30px;cursor:pointer;display:none;z-index:999999;font-size:14px;';
         
         if (getComputedStyle(card).position === 'static') {
@@ -772,7 +769,7 @@ async function downloadClean() {
         
         let cleanHTML = '<!DOCTYPE html>\n' + clonedDoc.outerHTML;
         
-        const serverUrl = window.location.origin.replace(/:\\/\\/localhost:\\d+/, '://cms.scanland.org');
+        const serverUrl = window.location.origin;
         
         const response = await fetch(serverUrl + '/clean-download', {
             method: 'POST',
@@ -892,32 +889,15 @@ app.post('/clean-download', (req, res) => {
     }
 });
 
-// Graceful shutdown handling
-process.on('SIGTERM', () => {
-    console.log('SIGTERM received, shutting down gracefully');
-    process.exit(0);
-});
-
-process.on('SIGINT', () => {
-    console.log('SIGINT received, shutting down gracefully');
-    process.exit(0);
-});
-
 // Start server
-const server = app.listen(PORT, '0.0.0.0', () => {
-    console.log('\n' + '='.repeat(15));
+app.listen(PORT, '0.0.0.0', () => {
+    console.log('\n='.repeat(15));
     console.log('SCANLAND CMS SERVER');
     console.log('='.repeat(60));
     console.log('🔋 INTEGRATION:');
-    console.log('Live - Add to HTML: <script src="https://cms.scanland.org/cms.js"></script>');
+    console.log(`Live - Add to HTML: <script src="https://cms.scanland.org/cms.js"></script>`);
     console.log(`Test - Add to HTML: <script src="http://localhost:${PORT}/cms.js"></script>`);
     console.log('');
     console.log(`✅ Ready for connections on port ${PORT}`);
     console.log('='.repeat(60));
-});
-
-// Handle server errors
-server.on('error', (error) => {
-    console.error('Server error:', error);
-    process.exit(1);
 });
