@@ -53,14 +53,7 @@ app.use((req, res, next) => {
 
 // Root endpoint for Railway health checks
 app.get('/', (req, res) => {
-    res.status(200).json({ 
-        message: 'Scanland CMS Server Running',
-        status: 'healthy',
-        version: '4.0.0',
-        port: PORT,
-        authenticated: authenticated,
-        timestamp: new Date().toISOString()
-    });
+    res.status(200).send('OK');
 });
 
 // Health check endpoint
@@ -177,8 +170,7 @@ async function doLogin() {
     const password = document.getElementById('loginPassword').value;
     
     try {
-        const serverUrl = window.location.origin.includes('localhost') ? 'https://cms.scanland.org' : window.location.origin;
-        const response = await fetch(serverUrl + '/login', {
+        const response = await fetch('https://cms.scanland.org/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ password: password })
@@ -285,7 +277,7 @@ async function downloadClean() {
         
         let cleanHTML = '<!DOCTYPE html>' + clonedDoc.outerHTML;
         
-        const response = await fetch(window.location.origin + '/clean-download', {
+        const response = await fetch('https://cms.scanland.org/clean-download', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
