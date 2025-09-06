@@ -15,7 +15,6 @@ app.use((req, res, next) => {
         'https://scanland.org',
         'https://www.scanland.org',
         'https://cms.scanland.org',
-        'https://www.cms.scanland.org',
         'https://districtforgesolutions.com',
         'https://www.districtforgesolutions.com',
         'https://forgottengrandstands.com',
@@ -69,6 +68,17 @@ app.get('/test', (req, res) => {
 app.get('/thanks', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'cmslandthanks.html'));
 });
+
+// Serve thanks page
+app.get('/help', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'cmscontact.html'));
+});
+
+// Serve thanks page
+app.get('/helpthanks', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'cmsthanks.html'));
+});
+
 
 // Health check
 app.get('/health', (req, res) => {

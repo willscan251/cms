@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanland CMS Support</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0F3D27, #1a5d3a);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: #F3E7D1;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 3px solid #7BB58C;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #0F3D27;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        
+        .subtitle {
+            color: #7BB58C;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            color: #0F3D27;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #7BB58C;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #F3E7D1;
+            color: #0F3D27;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #0F3D27;
+        }
+        
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        
+        .readonly {
+            background: rgba(123, 181, 140, 0.1);
+            color: #0F3D27;
+            font-style: italic;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .cancel-btn {
+            background: #ccc;
+            color: white;
+        }
+        
+        .cancel-btn:hover {
+            background: #bbb;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #0F3D27, #1a5d3a);
+            color: #F3E7D1;
+            box-shadow: 0 4px 12px rgba(15,61,39,0.3);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(15,61,39,0.4);
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Scanland CMS Support</h1>
+        <p class="subtitle">Get help with your CMS issues</p>
+        
+        <form action="https://formspree.io/f/xjkonakv" method="POST">
+            <div class="form-group">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="current-page">Website/Page You Were Editing:</label>
+                <input type="text" id="current-page" name="current_page" class="readonly" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="message">Describe the CMS Issue:</label>
+                <textarea id="message" name="message" placeholder="What problem are you experiencing with the CMS?" required></textarea>
+            </div>
+            
+            <input type="hidden" name="subject" value="Scanland CMS Support Request">
+            <input type="hidden" name="_next" value="https://scanland.org/cmsthanks.html">
+            
+            <div class="button-group">
+                <button type="button" class="cancel-btn" onclick="window.close()">Cancel</button>
+                <button type="submit" class="submit-btn">Send Support Request</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Get the source URL from the query parameter and display it
+        const urlParams = new URLSearchParams(window.location.search);
+        const sourceUrl = urlParams.get('source');
+        if (sourceUrl) {
+            document.getElementById('current-page').value = sourceUrl;
+        }
+        
+        // Focus on name field
+        document.getElementById('name').focus();
+    </script>
+</body>
+</html>
