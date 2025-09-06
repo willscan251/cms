@@ -9,10 +9,13 @@ let authenticated = false;
 
 // CORS Middleware
 app.use(express.json({ limit: '50mb' }));
+app.use(express.static('public'));
 app.use((req, res, next) => {
     const allowedOrigins = [
         'https://scanland.org',
         'https://www.scanland.org',
+        'https://cms.scanland.org',
+        'https://www.cms.scanland.org',
         'https://districtforgesolutions.com',
         'https://www.districtforgesolutions.com',
         'https://forgottengrandstands.com',
@@ -77,43 +80,78 @@ app.post('/login', (req, res) => {
         'Scanland2025!CMS': {
             user: 'admin',
             name: 'Scanland Admin',
-            permissions: 'full'
+            permissions: 'admin'
+        },
+        'TestCMS2025!Demo': {
+            user: 'demo-user',
+            name: 'Demo User',
+            permissions: 'demo'
         },
         'TSG2025!Edit': {
             user: 'tsg-client',
             name: 'The Scanland Group',
-            permissions: 'client'
+            permissions: 'client',
+            allowedDomains: ['thescanlandgroup.com', 'www.thescanlandgroup.com']
         },
         'District2025!Edit': {
             user: 'district-client', 
             name: 'District Forge Solutions',
-            permissions: 'client'
+            permissions: 'client',
+            allowedDomains: ['districtforgesolutions.com', 'www.districtforgesolutions.com']
         },
         'Jubilee2025!Edit': {
             user: 'jubilee-client',
             name: 'Jubilee Coffee & Tea',
-            permissions: 'client'
+            permissions: 'client',
+            allowedDomains: ['jubileecoffeeandtea.com', 'www.jubileecoffeeandtea.com']
+
         },
         'Mission2025!Edit': {
             user: 'mission-client',
             name: 'Mission Driven Pod',
-            permissions: 'client'
+            permissions: 'client',
+            allowedDomains: ['missiondrivenpod.com', 'www.missiondrivenpod.com']
         },
         'Consulting2025!Edit': {
             user: 'consulting-client',
             name: 'Scanland Consulting',
-            permissions: 'client'
+            permissions: 'client',
+            allowedDomains: ['scanlandconsulting.com', 'www.scanlandconsulting.com']
         },
         'Grandstands2025!Edit': {
             user: 'grandstands-client',
             name: 'Forgotten Grandstands',
-            permissions: 'client'
+            permissions: 'client',
+            allowedDomains: ['forgottengrandstands.com', 'www.forgottengrandstands.com']
         }
     };
     
     if (validPasswords[password]) {
         authenticated = true;
         const userInfo = validPasswords[password];
+        const referer = req.headers.referer || '';
+        
+        // Demo password: only works on test page
+        if (userInfo.permissions === 'demo' && !referer.includes('/test')) {
+            return res.json({
+                success: false,
+                message: 'Demo access only available on test page'
+            });
+        }
+        
+        // Client passwords: only work on their specific domains
+        if (userInfo.permissions === 'client' && userInfo.allowedDomains) {
+            const referrerDomain = new URL(referer).hostname;
+            if (!userInfo.allowedDomains.includes(referrerDomain)) {
+                return res.json({
+                    success: false,
+                    message: 'Access restricted to your website only'
+                });
+            }
+        }
+        
+        // Admin password: works everywhere (no restrictions)
+        
         console.log('Login successful for:', userInfo.name);
         res.json({ 
             success: true, 
