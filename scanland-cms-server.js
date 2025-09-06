@@ -55,9 +55,19 @@ app.use((req, res, next) => {
     next();
 });
 
-// Root endpoint for Railway health checks
+// Serve landing page
 app.get('/', (req, res) => {
-    res.status(200).send('OK');
+    res.sendFile(path.join(__dirname, 'public', 'scanlandcms.html'));
+});
+
+// Serve test page
+app.get('/test', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'cmstest.html'));
+});
+
+// Serve thanks page
+app.get('/thanks', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'cmslandthanks.html'));
 });
 
 // Health check
