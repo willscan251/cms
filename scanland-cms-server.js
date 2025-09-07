@@ -313,10 +313,15 @@ function makeContentEditable() {
     document.querySelectorAll('.cms-delete-btn').forEach(btn => btn.remove());
     
     // Make text elements editable
-    document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, li, td, th, blockquote').forEach(el => {
+    document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, li, td, th, blockquote, div').forEach(el => {
         if (el.closest('#cmsToolbar')) return;
         if (el.querySelector('img, button, a, input, select, textarea')) return;
-        
+
+        // For divs, only make them editable if they have meaningful text and aren't containers
+        if (el.tagName === 'DIV') {
+            if (el.children.length > 0 || el.textContent.trim().length < 5) return;
+        }
+
         const text = el.textContent?.trim();
         if (!text || text.length < 2) return;
         
@@ -642,6 +647,15 @@ function addButtonToPage() {
         
         showMessage('Button added');
         setTimeout(() => {
+            // Clear all CMS attributes first
+            document.querySelectorAll('[data-cms-text], [data-cms-button], [data-cms-image]').forEach(el => {
+                el.removeAttribute('data-cms-text');
+                el.removeAttribute('data-cms-button'); 
+                el.removeAttribute('data-cms-image');
+            });
+            document.querySelectorAll('.cms-delete-btn').forEach(btn => btn.remove());
+            
+            // Then re-initialize everything
             makeContentEditable();
         }, 100);
         
