@@ -313,7 +313,7 @@ function makeContentEditable() {
     document.querySelectorAll('.cms-delete-btn').forEach(btn => btn.remove());
     
     // Make text elements editable
-    document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, li, td, th').forEach(el => {
+    document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, li, td, th, blockquote').forEach(el => {
         if (el.closest('#cmsToolbar')) return;
         if (el.querySelector('img, button, a, input, select, textarea')) return;
         
@@ -585,10 +585,19 @@ function duplicateElement() {
         target.parentNode.insertBefore(clone, target.nextSibling);
         showMessage('Element duplicated');
         
-        // Re-initialize CMS features
+        // Re-initialize CMS features properly
         setTimeout(() => {
-            makeContentEditable();
-        }, 200);
+            // Clear all CMS attributes first
+            document.querySelectorAll('[data-cms-text], [data-cms-button], [data-cms-image]').forEach(el => {
+                el.removeAttribute('data-cms-text');
+                el.removeAttribute('data-cms-button'); 
+                el.removeAttribute('data-cms-image');
+        });
+        document.querySelectorAll('.cms-delete-btn').forEach(btn => btn.remove());
+    
+        // Then re-initialize everything
+        makeContentEditable();
+    }, 200);
         
         document.removeEventListener('click', handler, true);
     };
