@@ -152,12 +152,15 @@ app.post('/login', (req, res) => {
         const referer = req.headers.referer || '';
         
         // Demo password: only works on test page
-        if (userInfo.permissions === 'demo' && !referer.includes('/test')) {
+    if (userInfo.permissions === 'demo') {
+        const currentUrl = req.headers.referer || req.get('host') + req.originalUrl;
+        if (!currentUrl.includes('/test') && !req.originalUrl.includes('/test')) {
             return res.json({
                 success: false,
                 message: 'Demo access only available on test page'
             });
         }
+    }
         
         // Client passwords: only work on their specific domains
         if (userInfo.permissions === 'client' && userInfo.allowedDomains) {
