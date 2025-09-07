@@ -695,48 +695,29 @@ function reorderCards() {
         }
         
         const titles = children.map((card, i) => {
-    // Try to get a meaningful title from various elements
-    let title = null;
-    
-    // First try headings
-    title = card.querySelector('h1,h2,h3,h4,h5,h6')?.textContent?.trim();
-    
-    // If no heading, try first paragraph
-    if (!title) {
-        title = card.querySelector('p')?.textContent?.trim();
-        if (title && title.length > 50) {
-            title = title.substring(0, 47) + '...';
-        }
-    }
-    
-    // If no paragraph, try blockquote (for testimonials)
-    if (!title) {
-        title = card.querySelector('blockquote')?.textContent?.trim();
-        if (title && title.length > 40) {
-            title = title.substring(0, 37) + '...';
-        }
-    }
-    
-    // If no text content, try alt text from images
-    if (!title) {
-        const img = card.querySelector('img');
-        if (img) {
-            title = img.alt || 'Image';
-        }
-    }
-    
-    // If still nothing, try button text
-    if (!title) {
-        title = card.querySelector('a, button')?.textContent?.trim();
-    }
-    
-    // Final fallback
-    if (!title || title.length < 2) {
-        title = 'Element ' + (i + 1);
-    }
-    
-    return `${i+1}. ${title}`;
-});
+            let title = card.querySelector('h1,h2,h3,h4,h5,h6')?.textContent?.trim();
+            
+            if (!title) {
+                title = card.querySelector('p')?.textContent?.trim();
+                if (title && title.length > 50) {
+                    title = title.substring(0, 47) + '...';
+                }
+            }
+            
+            if (!title) {
+                title = card.querySelector('blockquote')?.textContent?.trim();
+                if (title && title.length > 40) {
+                    title = title.substring(0, 37) + '...';
+                }
+            }
+            
+            if (!title || title.length < 2) {
+                title = 'Section ' + (i + 1);
+            }
+            
+            return (i+1) + '. ' + title;
+        });
+        
         const cardIndex = parseInt(prompt('Which element to move?\\n\\n' + titles.join('\\n'))) - 1;
         
         if (cardIndex < 0 || cardIndex >= children.length) return;
@@ -755,7 +736,7 @@ function reorderCards() {
         }
         
         cardToMove.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        showMessage(\`Element moved to position \${newPosition + 1}\`);
+        showMessage('Element moved to position ' + (newPosition + 1));
         
         document.removeEventListener('click', handler, true);
     };
@@ -763,7 +744,7 @@ function reorderCards() {
     document.addEventListener('click', handler, true);
     setTimeout(() => document.removeEventListener('click', handler, true), 20000);
 }
-
+    
 function showInfo() {
     const backdrop = document.createElement('div');
     backdrop.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,61,39,0.8);z-index:9999999;display:flex;align-items:center;justify-content:center;';
