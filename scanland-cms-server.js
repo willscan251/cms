@@ -153,14 +153,21 @@ app.post('/login', (req, res) => {
         
         // Demo password: only works on test page
     if (userInfo.permissions === 'demo') {
-        const currentUrl = req.headers.referer || req.get('host') + req.originalUrl;
-        if (!currentUrl.includes('/test') && !req.originalUrl.includes('/test')) {
-            return res.json({
-                success: false,
-                message: 'Demo access only available on test page'
-            });
-        }
+    const referer = req.headers.referer || '';
+    const userAgent = req.headers['user-agent'] || '';
+    
+    // Allow demo access if referer contains test page or if no referer (direct access to test page)
+    const isTestPageAccess = referer.includes('/test') || referer.includes('cmstest.html') || 
+                            (!referer && req.originalUrl !== '/login'); // Direct access likely means test page
+    
+    if (!isTestPageAccess) {
+        console.log('Demo access blocked. Referer:', referer, 'OriginalUrl:', req.originalUrl);
+        return res.json({
+            success: false,
+            message: 'Demo access only available on test page'
+        });
     }
+}
         
         // Client passwords: only work on their specific domains
         if (userInfo.permissions === 'client' && userInfo.allowedDomains) {
