@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thank You — Scanland CMS</title>
+  <style>
+    :root {
+      --color-bg: #F3E7D1;
+      --color-text: #0F3D27;
+      --color-primary: #0F3D27;
+      --color-accent: #7BB58C;
+      --color-neutral: #E0E0E0;
+      --color-footer: #0B2A1A;
+      --footer-hover: #145B37;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Inter, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    /* Logo */
+    .logo {
+      max-width: 100px;
+      height: 100px;
+      background: var(--color-primary);
+      border-radius: 16px;
+      margin: 0 auto 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-bg);
+      font-weight: 900;
+      font-size: 40px;
+    }
+
+    /* Thank You Card */
+    .thank-you-card {
+      background: var(--color-primary);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 3rem 2rem;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .thank-you-card h2 {
+      color: var(--color-bg);
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 800;
+    }
+
+    .thank-you-card p {
+      color: var(--color-bg);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      background: var(--color-bg);
+      color: var(--color-primary);
+      margin: 0 10px 10px 0;
+    }
+
+    .button:hover {
+      background: var(--color-accent);
+      color: var(--color-bg);
+      transform: translateY(-2px);
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: var(--color-bg);
+      border: 2px solid var(--color-bg);
+    }
+
+    .button.secondary:hover {
+      background: var(--color-bg);
+      color: var(--color-primary);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Next Steps */
+    .next-steps {
+      background: rgba(243, 231, 209, 0.2);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 2rem;
+      text-align: left;
+      max-width: 600px;
+    }
+
+    .next-steps h3 {
+      color: var(--color-bg);
+      margin-bottom: 1rem;
+      text-align: center;
+      font-size: 1.3rem;
+    }
+
+    .next-steps ul {
+      list-style: none;
+      counter-reset: step-counter;
+    }
+
+    .next-steps li {
+      counter-increment: step-counter;
+      margin-bottom: 15px;
+      position: relative;
+      padding-left: 35px;
+      color: var(--color-bg);
+      opacity: 0.9;
+    }
+
+    .next-steps li::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: var(--color-bg);
+      color: var(--color-primary);
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    /* Footer */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255,255,255,0.95);
+  border-top: 1px solid #ddd;
+  padding: 1rem 0;
+  text-align: center;
+  font-weight: bold;
+  color: var(--color-text);
+  z-index: 100; /* ensure it sits above other content */
+}
+
+footer a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: var(--color-text);
+}
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .thank-you-card {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+      }
+
+      .thank-you-card h2 {
+        font-size: 2rem;
+      }
+
+      .button-group {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .next-steps {
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="thank-you-card">
+      <div class="logo">S</div>
+      <h2>Thank You!</h2>
+      <p>We've received your message and will be in touch within one business day with information about your project and next steps.</p>
+      
+      <div class="button-group">
+        <a href="/" class="button">Back to Home</a>
+        <a href="/test" class="button secondary">Try Our Demo</a>
+      </div>
+
+      <div class="next-steps">
+        <h3>What Happens Next</h3>
+        <ul>
+          <li>We'll review your project details and website requirements</li>
+          <li>Our team will prepare a customized proposal and timeline</li>
+          <li>We'll schedule a brief call to discuss your specific needs</li>
+          <li>Upon approval, we'll begin work on your CMS integration</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      A <a href="https://scanland.org" target="_blank" rel="noopener">Scanland</a> Solution
+    </p>
+  </footer>
+
+  <script src="https://cms.scanland.org/cms.js"></script>
+</body>
+</html>
