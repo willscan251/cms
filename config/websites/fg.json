@@ -1,0 +1,11 @@
+{
+  "passwords": {
+    "Grandstands2025!Edit": {
+      "user": "grandstands-client",
+      "name": "Forgotten Grandstands",
+      "permissions": "client",
+      "allowedDomains": ["forgottengrandstands.com", "www.forgottengrandstands.com"],
+      "license": { "active": true }
+    }
+  }
+}

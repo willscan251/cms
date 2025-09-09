@@ -1,0 +1,11 @@
+{
+  "passwords": {
+    "Mission2025!Edit": {
+      "user": "mission-client",
+      "name": "Mission Driven Pod",
+      "permissions": "client",
+      "allowedDomains": ["missiondrivenpod.com", "www.missiondrivenpod.com"],
+      "license": { "active": true }
+    }
+  }
+}

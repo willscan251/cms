@@ -1,0 +1,14 @@
+Copyright © 2025 Scanland & Co, LLC. All rights reserved.
+
+This Scanland CMS software and associated documentation files (the “Software”) are the
+confidential and proprietary information of Scanland & Co, LLC (“Company”).
+The Software is protected by copyright and other intellectual property laws.
+
+You are granted no rights to use, copy, modify, merge, publish, distribute,
+sublicense, or sell copies of the Software, unless expressly licensed in
+a written agreement with Scanland & Co, LLC.
+
+Any unauthorized use of the Software is strictly prohibited and may result
+in civil and criminal penalties.
+
+For licensing inquiries, please contact: contact@scanland.org

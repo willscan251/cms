@@ -1,0 +1,11 @@
+{
+  "passwords": {
+    "District2025!Edit": {
+      "user": "district-client",
+      "name": "District Forge Solutions",
+      "permissions": "client",
+      "allowedDomains": ["districtforgesolutions.com", "www.districtforgesolutions.com"],
+      "license": { "active": true }
+    }
+  }
+}

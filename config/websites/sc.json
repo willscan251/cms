@@ -1,0 +1,11 @@
+{
+  "passwords": {
+    "Consulting2025!Edit": {
+      "user": "consulting-client",
+      "name": "Scanland Consulting",
+      "permissions": "client",
+      "allowedDomains": ["scanlandconsulting.com", "www.scanlandconsulting.com"],
+      "license": { "active": true }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "passwords": {
+    "Client2025!Edit": {
+      "user": "client-user",
+      "name": "Client Name",
+      "permissions": "client",
+      "allowedDomains": ["client.com", "www.client.com"],
+      "license": { "active": true, "expiresAt": "2026-12-31T23:59:59Z" }
+    }
+  }
+}

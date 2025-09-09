@@ -1,0 +1,25 @@
+{
+  "allowedOrigins": [
+    "https://scanland.org",
+    "https://www.scanland.org",
+    "https://cms.scanland.org",
+    "https://districtforgesolutions.com",
+    "https://www.districtforgesolutions.com",
+    "https://forgottengrandstands.com",
+    "https://www.forgottengrandstands.com",
+    "https://jubileecoffeeandtea.com",
+    "https://www.jubileecoffeeandtea.com",
+    "https://missiondrivenpod.com",
+    "https://www.missiondrivenpod.com",
+    "https://scanlandconsulting.com",
+    "https://www.scanlandconsulting.com",
+    "https://thescanlandgroup.com",
+    "https://www.thescanlandgroup.com",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+    "http://localhost:5501",
+    "http://127.0.0.1:5501",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "enterpriseName": "ENTERPRISE NAME",
+  "allowedOrigins": [
+    "https://example.com",
+    "https://www.example.com",
+    "https://cms.example.com"
+  ],
+  "passwords": {
+    "Example2025!Admin": {
+      "user": "example-admin",
+      "name": "Example Admin",
+      "permissions": "enterprise",
+      "allowedDomains": ["example.com", "www.example.com"],
+      "license": { "active": true, "expiresAt": "2027-01-01T00:00:00Z" }
+    }
+  }
+}

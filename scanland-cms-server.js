@@ -1,6 +1,71 @@
+// Copyright © 2025 Scanland & Co, LLC. All rights reserved.
+// Unauthorized copying, modification, or distribution of this file
+// via any medium is strictly prohibited. Proprietary and confidential.
+
 const express = require('express');
+// ===== CONFIG LOADERS =====
 const fs = require('fs');
 const path = require('path');
+
+function loadJSON(p) {
+  return JSON.parse(fs.readFileSync(p, 'utf8'));
+}
+function listJsonFiles(dir) {
+  return fs.existsSync(dir)
+    ? fs.readdirSync(dir).filter(f => f.endsWith('.json')).map(f => path.join(dir, f))
+    : [];
+}
+
+// Global/shared CORS (your brands + localhost)
+function loadGlobalCors() {
+  const p = path.join(__dirname, 'config', 'cors.json');
+  if (!fs.existsSync(p)) return [];
+  const data = loadJSON(p);
+  return Array.isArray(data.allowedOrigins) ? data.allowedOrigins : [];
+}
+
+// Your own sites (passwords live here; can include allowedDomains)
+function loadWebsitePasswords() {
+  const dir = path.join(__dirname, 'config', 'websites');
+  const merged = {};
+  for (const file of listJsonFiles(dir)) {
+    const cfg = loadJSON(file);
+    if (cfg.passwords && typeof cfg.passwords === 'object') Object.assign(merged, cfg.passwords);
+  }
+  return merged;
+}
+
+// Clients you manage (ready now; populate as you sign them)
+function loadClientPasswords() {
+  const dir = path.join(__dirname, 'config', 'clients');
+  const merged = {};
+  for (const file of listJsonFiles(dir)) {
+    const cfg = loadJSON(file);
+    if (cfg.passwords && typeof cfg.passwords === 'object') Object.assign(merged, cfg.passwords);
+  }
+  return merged;
+}
+
+// Build a runtime config the middleware/routes can use
+function buildRuntime() {
+  const allowedOrigins = [...new Set([
+    ...loadGlobalCors()
+  ])];
+  const validPasswords = {
+    ...loadWebsitePasswords(),
+    ...loadClientPasswords()
+  };
+  return { allowedOrigins, validPasswords };
+}
+
+let RUNTIME = buildRuntime();
+function reloadRuntime() {
+  RUNTIME = buildRuntime();
+  console.log('[CONFIG] Reloaded',
+    'origins:', RUNTIME.allowedOrigins.length,
+    'passwords:', Object.keys(RUNTIME.validPasswords).length
+  );
+}
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -11,47 +76,19 @@ let authenticated = false;
 app.use(express.json({ limit: '50mb' }));
 app.use(express.static('public'));
 app.use((req, res, next) => {
-    const allowedOrigins = [
-        'https://scanland.org',
-        'https://www.scanland.org',
-        'https://cms.scanland.org',
-        'https://districtforgesolutions.com',
-        'https://www.districtforgesolutions.com',
-        'https://forgottengrandstands.com',
-        'https://www.forgottengrandstands.com',
-        'https://jubileecoffeeandtea.com',
-        'https://www.jubileecoffeeandtea.com',
-        'https://missiondrivenpod.com',
-        'https://www.missiondrivenpod.com',
-        'https://scanlandconsulting.com',
-        'https://www.scanlandconsulting.com',
-        'https://thescanlandgroup.com',
-        'https://www.thescanlandgroup.com',
-        'http://localhost:5500',
-        'http://127.0.0.1:5500',
-        'http://localhost:5501',
-        'http://127.0.0.1:5501',
-        'http://localhost:3000',
-        'http://127.0.0.1:3000'
-    ];
-    
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.header('Access-Control-Allow-Origin', origin);
-    } else {
-        res.header('Access-Control-Allow-Origin', '*');
-    }
-    
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200);
-    }
-    
-    console.log(`${req.method} ${req.path} from ${origin || 'unknown'}`);
-    next();
+  const origin = req.headers.origin;
+  if (origin && RUNTIME.allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  } else {
+    res.header('Access-Control-Allow-Origin', '*');
+  }
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
+
+  console.log(`${req.method} ${req.path} from ${origin || 'unknown'}`);
+  next();
 });
 
 // Serve landing page
@@ -69,16 +106,15 @@ app.get('/thanks', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'cmslandthanks.html'));
 });
 
-// Serve thanks page
+// Serve help page
 app.get('/help', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'cmscontact.html'));
 });
 
-// Serve thanks page
+// Serve helpthanks page
 app.get('/helpthanks', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'cmsthanks.html'));
 });
-
 
 // Health check
 app.get('/health', (req, res) => {
@@ -93,111 +129,78 @@ app.get('/health', (req, res) => {
 
 // Login endpoint with multiple client passwords
 app.post('/login', (req, res) => {
-    const { password } = req.body;
-    console.log('Login attempt received');
-    
-    const validPasswords = {
-        'Scanland2025!CMS': {
-            user: 'admin',
-            name: 'Scanland Admin',
-            permissions: 'admin'
-        },
-        'TestCMS2025!Demo': {
-            user: 'demo-user',
-            name: 'Demo User',
-            permissions: 'demo'
-        },
-        'TSG2025!Edit': {
-            user: 'tsg-client',
-            name: 'The Scanland Group',
-            permissions: 'client',
-            allowedDomains: ['thescanlandgroup.com', 'www.thescanlandgroup.com']
-        },
-        'District2025!Edit': {
-            user: 'district-client', 
-            name: 'District Forge Solutions',
-            permissions: 'client',
-            allowedDomains: ['districtforgesolutions.com', 'www.districtforgesolutions.com']
-        },
-        'Jubilee2025!Edit': {
-            user: 'jubilee-client',
-            name: 'Jubilee Coffee & Tea',
-            permissions: 'client',
-            allowedDomains: ['jubileecoffeeandtea.com', 'www.jubileecoffeeandtea.com']
+  const { password } = req.body;
+  console.log('Login attempt received');
 
-        },
-        'Mission2025!Edit': {
-            user: 'mission-client',
-            name: 'Mission Driven Pod',
-            permissions: 'client',
-            allowedDomains: ['missiondrivenpod.com', 'www.missiondrivenpod.com']
-        },
-        'Consulting2025!Edit': {
-            user: 'consulting-client',
-            name: 'Scanland Consulting',
-            permissions: 'client',
-            allowedDomains: ['scanlandconsulting.com', 'www.scanlandconsulting.com']
-        },
-        'Grandstands2025!Edit': {
-            user: 'grandstands-client',
-            name: 'Forgotten Grandstands',
-            permissions: 'client',
-            allowedDomains: ['forgottengrandstands.com', 'www.forgottengrandstands.com']
-        }
-    };
+  const validPasswords = RUNTIME.validPasswords; // <-- now loaded from JSON files
+
+  if (validPasswords[password]) {
+    const userInfo = validPasswords[password];
+    const lic = userInfo.license || {};
+    const active = lic.active !== false;
+    const notExpired = !lic.expiresAt || new Date(lic.expiresAt) >= new Date();
+    if (!active || !notExpired) {
+        return res.json({ success: false, message: 'License inactive or expired' });
+    }
     
-    if (validPasswords[password]) {
-        authenticated = true;
-        const userInfo = validPasswords[password];
-        const referer = req.headers.referer || '';
-        
-        // Demo password: only works on test page
-    if (userInfo.permissions === 'demo') {
+    authenticated = true;
     const referer = req.headers.referer || '';
-    const userAgent = req.headers['user-agent'] || '';
     
-    // Allow demo access if referer contains test page or if no referer (direct access to test page)
-    const isTestPageAccess = referer.includes('/test') || referer.includes('cmstest.html') || 
-                            (!referer && req.originalUrl !== '/login'); // Direct access likely means test page
-    
-    if (!isTestPageAccess) {
-        console.log('Demo access blocked. Referer:', referer, 'OriginalUrl:', req.originalUrl);
-        return res.json({
-            success: false,
-            message: 'Demo access only available on test page'
-        });
+    // Demo password: only works on test page
+    if (userInfo.permissions === 'demo') {
+      const userAgent = req.headers['user-agent'] || '';
+      
+      // Allow demo access if referer contains test page or if no referer (direct access to test page)
+      const isTestPageAccess = referer.includes('/test') || referer.includes('cmstest.html') || 
+                              (!referer && req.originalUrl !== '/login'); // Direct access likely means test page
+      
+      if (!isTestPageAccess) {
+          console.log('Demo access blocked. Referer:', referer, 'OriginalUrl:', req.originalUrl);
+          return res.json({
+              success: false,
+              message: 'Demo access only available on test page'
+          });
+      }
     }
-}
-        
-        // Client passwords: only work on their specific domains
-        if (userInfo.permissions === 'client' && userInfo.allowedDomains) {
-            const referrerDomain = new URL(referer).hostname;
-            if (!userInfo.allowedDomains.includes(referrerDomain)) {
-                return res.json({
-                    success: false,
-                    message: 'Access restricted to your website only'
-                });
-            }
+    
+    // Client passwords: only work on their specific domains
+    if (userInfo.permissions === 'client' && userInfo.allowedDomains) {
+        const referrerDomain = new URL(referer).hostname;
+        if (!userInfo.allowedDomains.includes(referrerDomain)) {
+            return res.json({
+                success: false,
+                message: 'Access restricted to your website only'
+            });
         }
-        
-        // Admin password: works everywhere (no restrictions)
-        
-        console.log('Login successful for:', userInfo.name);
-        res.json({ 
-            success: true, 
-            message: 'Authentication successful',
-            user: userInfo.user,
-            name: userInfo.name,
-            permissions: userInfo.permissions,
-            timestamp: new Date().toISOString()
-        });
-    } else {
-        console.log('Login failed - incorrect password');
-        res.json({ 
-            success: false, 
-            message: 'Invalid password'
-        });
     }
+    
+    // Admin password: works everywhere (no restrictions)
+    
+    console.log('Login successful for:', userInfo.name);
+    res.json({ 
+        success: true, 
+        message: 'Authentication successful',
+        user: userInfo.user,
+        name: userInfo.name,
+        permissions: userInfo.permissions,
+        timestamp: new Date().toISOString()
+    });
+  } else {
+    console.log('Login failed - incorrect password');
+    res.json({ 
+        success: false, 
+        message: 'Invalid password'
+    });
+  }
+});
+
+app.post('/admin/reload-config', (req, res) => {
+  try {
+    reloadRuntime();
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ success: false, message: e.message });
+  }
 });
 
 // Serve the CMS JavaScript
@@ -361,7 +364,7 @@ function makeContentEditable() {
         if (!btn.querySelector('.cms-delete-btn')) {
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'cms-delete-btn';
-            deleteBtn.innerHTML = '×';
+            deleteBtn.innerHTML = 'X';
             deleteBtn.style.cssText = 'position:absolute;top:-8px;right:-8px;background:#dc3545;color:white;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;display:none;z-index:999999;font-size:12px;font-weight:bold;';
             
             if (getComputedStyle(btn).position === 'static') {
@@ -744,7 +747,7 @@ function reorderCards() {
     document.addEventListener('click', handler, true);
     setTimeout(() => document.removeEventListener('click', handler, true), 20000);
 }
-    
+
 function showInfo() {
     const backdrop = document.createElement('div');
     backdrop.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,61,39,0.8);z-index:9999999;display:flex;align-items:center;justify-content:center;';
@@ -1011,7 +1014,7 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log('='.repeat(60));
     console.log('INTEGRATION:');
     console.log('Live - Add to HTML: <script src="https://cms.scanland.org/cms.js"></script>');
-    console.log('Test - Add to HTML: <script src="https://localhost:3001/cms.js"></script>');
+    console.log('Test - Add to HTML: <script src="http://localhost:3001/cms.js"></script>');
     console.log('');
     console.log('Ready for connections');
     console.log('='.repeat(60));

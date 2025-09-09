@@ -1,0 +1,16 @@
+{
+  "passwords": {
+    "Scanland2025!CMS": {
+      "user": "admin",
+      "name": "Scanland Admin",
+      "permissions": "admin",
+      "license": { "active": true }
+    },
+    "TestCMS2025!Demo": {
+      "user": "demo-user",
+      "name": "Demo User",
+      "permissions": "demo",
+      "license": { "active": true }
+    }
+  }
+}

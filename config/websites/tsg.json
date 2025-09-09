@@ -1,0 +1,11 @@
+{
+  "passwords": {
+    "TSG2025!Edit": {
+      "user": "tsg-client",
+      "name": "The Scanland Group",
+      "permissions": "client",
+      "allowedDomains": ["thescanlandgroup.com", "www.thescanlandgroup.com"],
+      "license": { "active": true }
+    }
+  }
+}

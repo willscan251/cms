@@ -1,0 +1,11 @@
+{
+  "passwords": {
+    "Jubilee2025!Edit": {
+      "user": "jubilee-client",
+      "name": "Jubilee Coffee & Tea",
+      "permissions": "client",
+      "allowedDomains": ["jubileecoffeeandtea.com", "www.jubileecoffeeandtea.com"],
+      "license": { "active": true }
+    }
+  }
+}
