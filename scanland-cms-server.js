@@ -91,29 +91,64 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve landing page
+// ===== PAGE ROUTING =====
+
+// Main landing page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'scanlandcms.html'));
 });
 
-// Serve test page
+// Demo pages - both /demo and /test work
+app.get('/demo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'cmstest.html'));
+});
+
 app.get('/test', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'cmstest.html'));
 });
 
-// Serve thanks page
-app.get('/thanks', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'cmslandthanks.html'));
+// Individual feature pages
+app.get('/features', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'features.html'));
 });
 
-// Serve help page
-app.get('/help', (req, res) => {
+app.get('/pricing', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'pricing.html'));
+});
+
+app.get('/contact', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'cmscontact.html'));
 });
 
-// Serve helpthanks page
-app.get('/helpthanks', (req, res) => {
+// Support/help pages - both /support and /help work  
+app.get('/support', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'cmshelp.html'));
+});
+
+app.get('/help', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'cmshelp.html'));
+});
+
+// Thank you pages
+app.get('/thanks', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'cmsthanks.html'));
+});
+
+app.get('/helpthanks', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'helpthanks.html'));
+});
+
+// Catch-all for unknown routes
+app.get('*', (req, res) => {
+    // Skip redirecting API routes and static files
+    if (req.path.startsWith('/api/') || 
+        req.path.startsWith('/assets/') || 
+        req.path.includes('.')) {
+        return res.status(404).send('Not Found');
+    }
+    
+    // Redirect everything else to home
+    res.redirect('/');
 });
 
 // Health check
@@ -360,30 +395,33 @@ function makeContentEditable() {
         
         btn.setAttribute('data-cms-button', 'true');
         
-        // Add delete button
-        if (!btn.querySelector('.cms-delete-btn')) {
-            const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'cms-delete-btn';
-            deleteBtn.innerHTML = 'X';
-            deleteBtn.style.cssText = 'position:absolute;top:-8px;right:-8px;background:#dc3545;color:white;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;display:none;z-index:999999;font-size:12px;font-weight:bold;';
-            
-            if (getComputedStyle(btn).position === 'static') {
-                btn.style.position = 'relative';
-            }
-            
-            btn.appendChild(deleteBtn);
-            
-            deleteBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                if (confirm('Delete this button?')) {
-                    btn.remove();
-                    showMessage('Button deleted');
-                }
-            });
-        }
+// Add delete button OUTSIDE the button element
+if (!btn.parentElement.querySelector('.cms-delete-btn')) {
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'cms-delete-btn';
+    deleteBtn.innerHTML = 'X';
+    deleteBtn.style.cssText = 'position:absolute;top:-8px;right:-8px;background:#dc3545;color:white;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;display:none;z-index:999999;font-size:12px;font-weight:bold;';
+    
+    // Make sure the parent container can hold the absolutely positioned delete button
+    if (getComputedStyle(btn.parentElement).position === 'static') {
+        btn.parentElement.style.position = 'relative';
+    }
+    
+    // Add delete button as sibling, not child
+    btn.parentElement.appendChild(deleteBtn);
+    
+    deleteBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         
+        if (confirm('Delete this button?')) {
+            btn.remove();
+            deleteBtn.remove(); // Remove the delete button too
+            showMessage('Button deleted');
+        }
+    });
+}
+
         btn.addEventListener('click', function(e) {
             if (!editMode) return;
             if (e.target.classList.contains('cms-delete-btn')) return;
@@ -395,21 +433,36 @@ function makeContentEditable() {
             if (editMode) {
                 this.style.outline = '2px solid #0F3D27';
                 this.style.cursor = 'pointer';
-                const deleteBtn = this.querySelector('.cms-delete-btn');
+                const deleteBtn = this.parentElement.querySelector('.cms-delete-btn');
                 if (deleteBtn) deleteBtn.style.display = 'block';
             }
         });
         
-        btn.addEventListener('mouseleave', function() {
-            if (editMode) {
-                this.style.outline = '';
-                this.style.cursor = '';
-                const deleteBtn = this.querySelector('.cms-delete-btn');
-                if (deleteBtn) deleteBtn.style.display = 'none';
-            }
-        });
-    });
+btn.addEventListener('mouseleave', function() {
+    if (editMode) {
+        this.style.outline = '';
+        this.style.cursor = '';
+        const deleteBtn = this.parentElement.querySelector('.cms-delete-btn'); // Fixed this line
+        if (deleteBtn) deleteBtn.style.display = 'none';
+    }
+});
+
+let isEditing = false;
+
+btn.addEventListener('click', function(e) {
+    if (!editMode || isEditing) return;
+    if (e.target.classList.contains('cms-delete-btn')) return;
     
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    
+    isEditing = true;
+    editButton(this);
+    
+    setTimeout(() => {
+        isEditing = false;
+    }, 500);
+});
     // Make images editable
     document.querySelectorAll('img').forEach(img => {
         if (img.closest('#cmsToolbar')) return;
@@ -513,13 +566,36 @@ function editText(element) {
 }
 
 function editButton(button) {
-    const text = button.textContent.trim();
-    const newText = prompt('Edit button text:', text);
-    if (newText !== null && newText !== text) {
-        button.textContent = newText;
-        showMessage('Button text updated');
+    // Get only the button's direct text content, excluding any child elements
+    let currentText = '';
+    for (let node of button.childNodes) {
+        if (node.nodeType === Node.TEXT_NODE) {
+            currentText += node.textContent;
+        }
+    }
+    currentText = currentText.trim();
+    
+    // If no direct text found, use textContent but clean it
+    if (!currentText) {
+        currentText = button.textContent.replace(/[×X]/g, '').trim();
     }
     
+    const newText = prompt('Edit button text:', currentText);
+    
+    if (newText !== null && newText !== currentText) {
+        // Clear existing text nodes only
+        const childNodes = Array.from(button.childNodes);
+        childNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                button.removeChild(node);
+            }
+        });
+        
+        // Add new text node
+        button.insertBefore(document.createTextNode(newText), button.firstChild);
+        showMessage('Button text updated');
+    }
+
     if (button.tagName === 'A') {
         const url = button.href || '#';
         const newUrl = prompt('Edit button destination:', url);
