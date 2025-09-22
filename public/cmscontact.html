@@ -1,177 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scanland CMS Support</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact | Scanland CMS</title>
+  <meta name="description" content="Get started with Scanland CMS. Tell us about your project.">
   <link rel="stylesheet" href="assets/cms.css">
-  
-  <!-- Favicons -->
   <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
-  
-  <style>
-    /* Additional styles for support page */
-    body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 40px 20px 120px;
-    }
-
-    .support-container {
-      background: var(--color-bg);
-      border: 4px solid var(--color-accent);
-      border-radius: 16px;
-      padding: 50px;
-      max-width: 600px;
-      margin: 0 auto;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-    }
-
-    .support-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-
-    .support-header h1 {
-      color: var(--color-primary);
-      font-size: 2.2em;
-      margin-bottom: 10px;
-    }
-
-    .support-header .subtitle {
-      color: var(--color-accent);
-      font-size: 1.1em;
-      font-weight: 600;
-    }
-
-    .form-group {
-      margin-bottom: 25px;
-      text-align: left;
-    }
-
-    .form-group label {
-      display: block;
-      color: var(--color-primary);
-      font-weight: 700;
-      margin-bottom: 8px;
-      font-size: 1rem;
-    }
-
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      padding: 15px;
-      border: 2px solid var(--color-accent);
-      border-radius: 8px;
-      font-size: 1rem;
-      font-family: inherit;
-      background: var(--color-bg);
-      color: var(--color-primary);
-      transition: border-color 0.3s ease;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus {
-      outline: none;
-      border-color: var(--color-primary);
-    }
-
-    .form-group textarea {
-      resize: vertical;
-      min-height: 120px;
-    }
-
-    .readonly {
-      background: rgba(123, 181, 140, 0.1) !important;
-      font-style: italic;
-      opacity: 0.8;
-    }
-
-    .button-group {
-      display: flex;
-      gap: 15px;
-      margin-top: 30px;
-      justify-content: center;
-    }
-
-    .cancel-btn {
-      background: var(--color-neutral);
-      color: var(--color-text);
-      border: 2px solid var(--color-neutral);
-    }
-
-    .cancel-btn:hover {
-      background: #ccc;
-      border-color: #ccc;
-    }
-
-    .submit-btn {
-      background: var(--color-primary);
-      color: var(--color-bg);
-      border: 2px solid var(--color-primary);
-    }
-
-    .submit-btn:hover {
-      background: var(--color-accent);
-      border-color: var(--color-accent);
-    }
-  </style>
 </head>
 <body>
+  <!-- NAVBAR -->
+  <header>
+    <div class="navbar">
+      <a href="/" class="brand">
+        <img class="logo" src="assets/images/cms.png" alt="CMS Logo">
+        <span class="brand-name">Scanland CMS</span>
+      </a>
+      <nav id="mobile-nav">
+        <a href="/demo" class="nav-link">Demo</a>
+        <a href="/features" class="nav-link">Features</a>
+        <a href="/pricing" class="nav-link">Pricing</a>
+        <a href="/contact" class="nav-link active">Contact</a>
+      </nav>
+    </div>
+  </header>
+
   <main>
-    <div class="support-container">
-      <div class="support-header">
-        <h1>Scanland CMS Support</h1>
+    <!-- Logo -->
+    <img src="assets/images/cms.png" alt="CMS Logo">
+
+    <!-- Contact Hero -->
+    <section class="hero-section">
+      <div class="container">
+        <h1>Tell Us About Your Site</h1>
+        <h2>We'll follow up within 2 business days.</h2>
       </div>
-      
-      <form action="https://formspree.io/f/xjkonakv" method="POST">
-        <div class="form-group">
-          <label for="name">Your Name:</label>
-          <input type="text" id="name" name="name" required>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="content-section">
+      <form action="https://formspree.io/f/mldwaoop" method="POST" style="max-width: 600px; margin: 0 auto;">
+        <input type="hidden" name="Note" value="Sent from Scanland CMS contact page"/>
+        <input type="hidden" name="_next" value="https://cms.scanland.org/thanks"/>
+        
+        <div style="margin-bottom: 25px;">
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--color-primary);">Name</label>
+          <input type="text" name="Name" required style="width: 100%; padding: 15px; border: 2px solid var(--color-accent); border-radius: 8px; font-size: 1rem; background: var(--color-bg); color: var(--color-primary);"/>
         </div>
         
-        <div class="form-group">
-          <label for="email">Your Email:</label>
-          <input type="email" id="email" name="email" required>
+        <div style="margin-bottom: 25px;">
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--color-primary);">Email</label>
+          <input type="email" name="Email" required style="width: 100%; padding: 15px; border: 2px solid var(--color-accent); border-radius: 8px; font-size: 1rem; background: var(--color-bg); color: var(--color-primary);"/>
         </div>
         
-        <div class="form-group">
-          <label for="current-page">Website/Page You Were Editing:</label>
-          <input type="text" id="current-page" name="current_page" class="readonly" readonly>
+        <div style="margin-bottom: 25px;">
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--color-primary);">Website URL (if any)</label>
+          <input type="url" name="Website" style="width: 100%; padding: 15px; border: 2px solid var(--color-accent); border-radius: 8px; font-size: 1rem; background: var(--color-bg); color: var(--color-primary);"/>
         </div>
         
-        <div class="form-group">
-          <label for="message">Describe the CMS Issue:</label>
-          <textarea id="message" name="message" placeholder="What problem are you experiencing with the CMS?" required></textarea>
+        <div style="margin-bottom: 25px;">
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--color-primary);">What's your current setup?</label>
+          <select name="Project Type" required style="width: 100%; padding: 15px; border: 2px solid var(--color-accent); border-radius: 8px; font-size: 1rem; background: var(--color-bg); color: var(--color-primary);">
+            <option value="">Select one...</option>
+            <option value="static-html">I have a simple HTML website</option>
+            <option value="wordpress-cms">I have WordPress/Squarespace/Wix (or similar)</option>
+            <option value="no-website">I don't have a website yet</option>
+            <option value="unsure">I'm not sure</option>
+          </select>
         </div>
         
-        <input type="hidden" name="subject" value="Scanland CMS Support Request">
-        <input type="hidden" name="_next" value="https://cms.scanland.org/helpthanks">
+        <div style="margin-bottom: 25px;">
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--color-primary);">Message</label>
+          <textarea name="Message" placeholder="Tell us about your site, goals, and timeline..." required style="width: 100%; padding: 15px; border: 2px solid var(--color-accent); border-radius: 8px; font-size: 1rem; background: var(--color-bg); color: var(--color-primary); min-height: 120px; resize: vertical;"></textarea>
+        </div>
         
-        <div class="button-group">
-          <button type="button" class="button cancel-btn" onclick="window.close()">Cancel</button>
-          <button type="submit" class="button submit-btn">Send Support Request</button>
+        <div style="text-align: center;">
+          <button type="submit" class="button primary">Send Message</button>
         </div>
       </form>
-    </div>
-  </main>
+    </section>
 
-  <script>
-    // Get the source URL from query parameter and display it
-    const urlParams = new URLSearchParams(window.location.search);
-    const sourceUrl = urlParams.get('source');
-    if (sourceUrl) {
-      document.getElementById('current-page').value = sourceUrl;
-    }
-    
-    // Focus on name field
-    document.getElementById('name').focus();
-  </script>
+    <section class="content-section">
+      <div class="mission-box">
+        <p>Need help with the CMS? Visit our <a href="/support">support page</a> instead.</p>
+      </div>
+    </section>
+  </main>
 
   <!-- Footer -->
   <footer>

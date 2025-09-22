@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help Request Received | Scanland CMS</title>
+  <link rel="stylesheet" href="assets/cms.css">
+  
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+  
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px 20px 120px;
+    }
+
+    .support-thank-you {
+      background: var(--color-primary);
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      padding: 60px 40px;
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      color: var(--color-bg);
+    }
+
+    .support-thank-you h1 {
+      color: var(--color-bg);
+      font-size: 2.8rem;
+      margin-bottom: 25px;
+      font-weight: 800;
+    }
+
+    .support-thank-you .message {
+      line-height: 1.7;
+      margin-bottom: 30px;
+      font-size: 1.2rem;
+      opacity: 0.95;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+    .close-btn, .continue-btn {
+      background: var(--color-bg);
+      color: var(--color-primary);
+      margin: 0;
+    }
+
+    .close-btn:hover, .continue-btn:hover {
+      background: var(--color-accent);
+      color: var(--color-bg);
+    }
+
+    .auto-close-info {
+      font-size: 0.9em;
+      opacity: 0.8;
+      margin-top: 20px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="support-thank-you">
+      <h1>Help Request Sent!</h1>
+      
+      <p class="message">
+        We've received your help request and will get back to you within 24 hours.
+      </p>
+            
+      <div class="button-group">
+        <button class="button close-btn" onclick="window.close()">Close This Tab</button>
+        <a href="/" class="button continue-btn">Back to Home</a>
+      </div>
+
+      <p class="auto-close-info" id="countdown">
+        This tab will close automatically in 10 seconds
+      </p>
+    </div>
+  </main>
+
+  <script>
+    // Auto-close countdown
+    let countdown = 10;
+    const countdownElement = document.getElementById('countdown');
+    
+    const countdownInterval = setInterval(() => {
+      countdown--;
+      if (countdown > 0) {
+        countdownElement.textContent = `This tab will close automatically in ${countdown} seconds`;
+      } else {
+        clearInterval(countdownInterval);
+        window.close();
+      }
+    }, 1000);
+
+    // If window.close() doesn't work, redirect after countdown
+    setTimeout(() => {
+      if (document.visibilityState === 'visible') {
+        window.location.href = '/';
+      }
+    }, 11000);
+  </script>
+
+  <!-- Footer -->
+  <footer>
+    <p>"Content Management. Simple."<br>
+      A <a href="https://scanland.org" target="_blank" rel="noopener">Scanland</a> Solution
+    </p>
+  </footer>
+
+  <!-- Scanland CMS Integration -->
+  <script src="https://cms.scanland.org/cms.js"></script>
+</body>
+</html>
